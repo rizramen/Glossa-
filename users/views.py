@@ -9,3 +9,6 @@ class LoginView(TemplateView):
 
 class RegisterView(TemplateView):
     template_name = "users/register.html"
+
+class AccountView(TemplateView):
+    template_name = "users/account.html"
