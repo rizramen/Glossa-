@@ -1,5 +1,9 @@
 from django.views.generic import TemplateView
 
+
+class QuizHomeView(TemplateView):
+    template_name = "quiz/quiz_home.html"
+
 class QuizStartView(TemplateView):
     template_name = "quiz/start.html"
 

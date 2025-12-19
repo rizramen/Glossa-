@@ -24,6 +24,6 @@ urlpatterns = [
     path("dictionary/", include("dictionary.urls")),
     path("quiz/", include("quiz.urls")),
     path("friends/", include("friends.urls")),
-    path("", include("wordofday.urls")),
+    path("wordofday/", include("wordofday.urls")),
 ]
 

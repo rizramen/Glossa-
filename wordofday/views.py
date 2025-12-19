@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+class WordOfDayView(TemplateView):
+    template_name = "wordofday/word_of_day.html"
+
+class AdminSetWordView(TemplateView):
+    template_name = "wordofday/admin_set_word.html"
