@@ -1,4 +1,8 @@
+
 from django.views.generic import TemplateView
+
+class DictionaryHomeView(TemplateView):
+    template_name = "dictionary/dictionary_home.html"
 
 class DictionaryListView(TemplateView):
     template_name = "dictionary/list.html"
