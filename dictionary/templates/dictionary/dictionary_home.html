@@ -3,4 +3,10 @@
 {% block page_content %}
 
 <h1>Dictionary</h1>
+
+<a href="{% url 'dictionary:create' %}">Create new dictionary</a>
+
+<p>
+    <a href="{% url 'dictionary:list' %}">Show all dictionaries</a>
+    </p>
 {% endblock %}

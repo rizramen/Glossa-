@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1>Dictionary list</h1>
+
+<ul>
+    {% for dictionary in object_list %}
+        <li>{{ dictionary.name }}</li>
+    {% empty %}
+        <li>No dictionaries yet.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
