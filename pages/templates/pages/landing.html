@@ -1,4 +1,29 @@
 {% extends "base.html" %}
+
 {% block page_content %}
-<h1>Landing</h1>
+<div style="text-align: center; padding: 50px;">
+    <h1>Welcome to Glossa</h1>
+    <p style="font-size: 1.2em; color: #555;">Your personal vocab-trainer.</p>
+
+    <br>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <a href="{% url 'dictionary:list' %}" style="text-decoration: none;">
+            <button style="padding: 15px 30px; font-size: 18px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">
+                My dictionaries &rarr;
+            </button>
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}" style="text-decoration: none;">
+            <button style="padding: 15px 30px; font-size: 18px; cursor: pointer; background-color: #008CBA; color: white; border: none; border-radius: 5px;">
+                Login here
+            </button>
+        </a>
+
+        <p style="margin-top: 20px;">
+            No account? <a href="{% url 'register' %}">Register here</a>
+        </p>
+    {% endif %}
+</div>
 {% endblock %}

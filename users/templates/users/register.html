@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<h1>register</h1>
-<p>Stub for Lab 10</p>
+<div style="max-width: 400px; margin: 0 auto; padding: 20px;">
+    <h2>Register</h2>
+    <p>Create new account.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+            Create Account
+        </button>
+    </form>
+
+    <p style="margin-top: 20px;">
+       You already have one? <a href="{% url 'login' %}">Login here</a>
+    </p>
+</div>
 {% endblock %}

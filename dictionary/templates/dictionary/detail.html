@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<h1>detail</h1>
+  <h1>Dictionary: {{ dictionary.name }}</h1>
+
+  <p>
+      <a href="{% url 'dictionary:add_word' dictionary.id %}">
+          <button>+ Add new word</button>
+      </a>
+  </p>
+
+  <h3>Words:</h3>
+  <ul>
+    {% for word in dictionary.words.all %}
+      <li><strong>{{ word.term }}</strong>: {{ word.definition }} ({{ word.language }})</li>
+    {% empty %}
+      <li>No words added yet.</li>
+    {% endfor %}
+  </ul>
 {% endblock %}

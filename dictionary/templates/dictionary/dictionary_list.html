@@ -5,7 +5,9 @@
 
 <ul>
     {% for dictionary in object_list %}
-        <li>{{ dictionary.name }}</li>
+        <li>
+    <a href="{% url 'dictionary:detail' dictionary.id %}">{{ dictionary.name }}</a>
+        </li>
     {% empty %}
         <li>No dictionaries yet.</li>
     {% endfor %}

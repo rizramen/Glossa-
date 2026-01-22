@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Glossa</title>
 </head>
@@ -11,6 +11,21 @@
     <a href="/quiz/">Quiz</a>
     <a href="/friends/">Friends</a>
     <a href="/users/login/">Login</a>
+<div style="float: right;"> {% if user.is_authenticated %}
+        <span>Hello, <strong>{{ user.username }}</strong>!</span>
+
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: #ff0000; cursor: pointer; text-decoration: underline;">
+                Logout
+            </button>
+        </form>
+
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</div>
+
 </nav>
 
 <hr>
