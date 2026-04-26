@@ -1,22 +1,28 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <title>Glossa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Glossa{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/dictionary/">Dictionaries</a>
-    <a href="/quiz/">Quiz</a>
-    <a href="/friends/">Friends</a>
-    <a href="/users/login/">Login</a>
-<div style="float: right;"> {% if user.is_authenticated %}
+<nav class="site-nav">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dictionary/">Dictionaries</a>
+        <a href="/quiz/">Quiz</a>
+        <a href="/friends/">Friends</a>
+    </div>
+    <div class="nav-user">
+    {% if user.is_authenticated %}
         <span>Hello, <strong>{{ user.username }}</strong>!</span>
 
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        <form action="{% url 'logout' %}" method="post" class="inline-form">
             {% csrf_token %}
-            <button type="submit" style="background: none; border: none; color: #ff0000; cursor: pointer; text-decoration: underline;">
+            <button type="submit" class="button-link button-link-danger">
                 Logout
             </button>
         </form>
@@ -24,14 +30,12 @@
     {% else %}
         <a href="{% url 'login' %}">Login</a>
     {% endif %}
-</div>
-
+    </div>
 </nav>
 
-<hr>
-
-{% block page_content %}
-{% endblock %}
+<main class="page-shell">
+{% block page_content %}{% endblock %}
+</main>
 
 </body>
 </html>

@@ -1,16 +1,27 @@
 {% extends "base.html" %}
+{% block title %}My Dictionaries | Glossa{% endblock %}
 
 {% block page_content %}
-<h1>Dictionary list</h1>
+<section class="panel">
+<div class="section-header">
+    <div>
+        <h1>My Dictionaries</h1>
+        <p class="section-intro">Everything here belongs to the currently logged-in user.</p>
+    </div>
+    <a href="{% url 'dictionary:create' %}" class="button-primary">New dictionary</a>
+</div>
 
-<ul>
+<ul class="item-list">
     {% for dictionary in object_list %}
-        <li>
-    <a href="{% url 'dictionary:detail' dictionary.id %}">{{ dictionary.name }}</a>
+        <li class="item-card">
+            <a href="{% url 'dictionary:detail' dictionary.id %}" class="item-card-link">
+                <span class="item-card-title">{{ dictionary.name }}</span>
+                <span class="item-card-meta">{{ dictionary.get_language_display }}</span>
+            </a>
         </li>
     {% empty %}
-        <li>No dictionaries yet.</li>
+        <li class="empty-state">No dictionaries yet. Create your first one to get started.</li>
     {% endfor %}
 </ul>
-
+</section>
 {% endblock %}

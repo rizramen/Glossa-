@@ -1,0 +1,13 @@
+.venv/
+venv/
+bin/
+include/
+lib/
+pyvenv.cfg
+
+__pycache__/
+*.py[cod]
+
+.DS_Store
+
+staticfiles/

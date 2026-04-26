@@ -1,12 +1,32 @@
 {% extends "base.html" %}
+{% block title %}Dictionaries | Glossa{% endblock %}
 
 {% block page_content %}
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <h1>Dictionary Workspace</h1>
+            <p class="section-intro">Create a dictionary, then add words and definitions you want to keep practicing.</p>
+        </div>
+        <div class="action-row">
+            <a href="{% url 'dictionary:create' %}" class="button-primary">Create dictionary</a>
+            <a href="{% url 'dictionary:list' %}" class="button-secondary">View all dictionaries</a>
+        </div>
+    </div>
 
-<h1>Dictionary</h1>
-
-<a href="{% url 'dictionary:create' %}">Create new dictionary</a>
-
-<p>
-    <a href="{% url 'dictionary:list' %}">Show all dictionaries</a>
-    </p>
+    {% if user.is_authenticated %}
+    <ul class="item-list">
+        {% for dictionary in recent_dictionaries %}
+            <li class="item-card">
+                <a href="{% url 'dictionary:detail' dictionary.id %}" class="item-card-link">
+                    <span class="item-card-title">{{ dictionary.name }}</span>
+                    <span class="item-card-meta">{{ dictionary.get_language_display }}</span>
+                </a>
+            </li>
+        {% empty %}
+            <li class="empty-state">No dictionaries yet. Create your first one to get started.</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</section>
 {% endblock %}

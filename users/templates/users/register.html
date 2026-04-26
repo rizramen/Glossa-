@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% block title %}Register | Glossa{% endblock %}
 
 {% block page_content %}
-<div style="max-width: 400px; margin: 0 auto; padding: 20px;">
+<section class="form-card">
     <h2>Register</h2>
-    <p>Create new account.</p>
+    <p class="section-intro">Create an account to start building your own study dictionaries.</p>
 
-    <form method="post">
+    <form method="post" class="stack-form">
         {% csrf_token %}
         {{ form.as_p }}
 
-        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">
+        <button type="submit" class="button-primary">
             Create Account
         </button>
     </form>
 
-    <p style="margin-top: 20px;">
+    <p class="spaced-text">
        You already have one? <a href="{% url 'login' %}">Login here</a>
     </p>
-</div>
+</section>
 {% endblock %}

@@ -4,7 +4,8 @@ from .views import (
     DictionaryListView,
     DictionaryDetailView,
     CreateDictionaryView,
-    AddWordView
+    AddWordView,
+    DeleteDictionaryView,
 )
 
 app_name = "dictionary"
@@ -16,4 +17,5 @@ urlpatterns = [
     path("<int:id>/", DictionaryDetailView.as_view(), name="detail"),
     path("create/", CreateDictionaryView.as_view(), name="create"),
     path("<int:id>/add-word/", AddWordView.as_view(), name="add_word"),
+    path("<int:id>/delete/", DeleteDictionaryView.as_view(), name="delete"),
 ]

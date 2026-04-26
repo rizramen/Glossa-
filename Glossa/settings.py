@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +23,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-amwm)3p($3ap(efn&d934mz@rz)tdnc7g=7+oz0ycem58=t&#!'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-amwm)3p($3ap(efn&d934mz@rz)tdnc7g=7+oz0ycem58=t&#!",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = {
+    host.strip()
+    for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+    if host.strip()
+}
+
+render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if render_external_hostname:
+    ALLOWED_HOSTS.add(render_external_hostname)
+
+ALLOWED_HOSTS = sorted(ALLOWED_HOSTS)
+
+CSRF_TRUSTED_ORIGINS = {
+    origin.strip()
+    for origin in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+}
+
+render_external_url = os.environ.get("RENDER_EXTERNAL_URL", "").strip()
+if render_external_url:
+    CSRF_TRUSTED_ORIGINS.add(render_external_url)
+
+CSRF_TRUSTED_ORIGINS = sorted(CSRF_TRUSTED_ORIGINS)
 
 
 # Application definition
@@ -48,6 +76,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,10 +109,10 @@ WSGI_APPLICATION = 'Glossa.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 
@@ -121,5 +150,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+LOGIN_URL = "/users/login/"
 LOGOUT_REDIRECT_URL = 'landing'
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

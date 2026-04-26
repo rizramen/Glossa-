@@ -1,6 +1,29 @@
 {% extends "base.html" %}
+{% block title %}Quiz Results | Glossa{% endblock %}
 
 {% block page_content %}
-<h1>result</h1>
-<p>Stub for Lab 10</p>
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">{{ quiz.dictionary.name }} • {{ quiz.dictionary.get_language_display }}</p>
+            <h1>Quiz Results</h1>
+            <p class="section-intro">You answered {{ correct_answers }} out of {{ total_questions }} correctly.</p>
+        </div>
+        <a href="{% url 'quiz:quiz_home' %}" class="button-primary">Start another quiz</a>
+    </div>
+
+    <ul class="word-list">
+        {% for result in results %}
+            <li class="word-card">
+                <div class="word-card-header">
+                    <strong>{{ result.word.term }}</strong>
+                    <span class="pill">{% if result.correct %}Correct{% else %}Incorrect{% endif %}</span>
+                </div>
+                <p>{{ result.word.definition }}</p>
+            </li>
+        {% empty %}
+            <li class="empty-state">No answers were recorded for this quiz.</li>
+        {% endfor %}
+    </ul>
+</section>
 {% endblock %}

@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% block title %}Login | Glossa{% endblock %}
 
 {% block page_content %}
-<h1>Login</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+<section class="form-card">
+    <h1>Login</h1>
+    <p class="section-intro">Access your personal dictionaries and study workspace.</p>
+    <form method="post" class="stack-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-primary">Login</button>
+    </form>
+    <p class="spaced-text">No account yet? <a href="{% url 'register' %}">Register here</a></p>
+</section>
 {% endblock %}

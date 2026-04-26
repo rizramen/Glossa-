@@ -1,9 +1,64 @@
 {% extends "base.html" %}
+{% block title %}Quiz | Glossa{% endblock %}
 
 {% block page_content %}
-<h1>Quiz</h1>
-<p>Choose dictionary and start quiz</p>
-<ul>
-    <li><a href="{% url 'start' %}">Start Quiz</a></li>
-</ul>
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <h1>Quiz Workspace</h1>
+            <p class="section-intro">Choose one of your dictionaries and test yourself on the saved word definitions.</p>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'quiz:start' %}" class="stack-form">
+        {% csrf_token %}
+        {{ start_form.as_p }}
+        <button type="submit" class="button-primary">Start quiz</button>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <h2>Your Dictionaries</h2>
+            <p class="section-intro">Any dictionary with words can be used for a quiz.</p>
+        </div>
+        <a href="{% url 'dictionary:list' %}" class="button-secondary">Open dictionaries</a>
+    </div>
+
+    <ul class="item-list">
+        {% for dictionary in dictionaries %}
+            <li class="item-card">
+                <a href="{% url 'dictionary:detail' dictionary.id %}" class="item-card-link">
+                    <span class="item-card-title">{{ dictionary.name }}</span>
+                    <span class="item-card-meta">{{ dictionary.get_language_display }} • {{ dictionary.words.count }} words</span>
+                </a>
+            </li>
+        {% empty %}
+            <li class="empty-state">You do not have any dictionaries yet.</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <h2>Recent Quizzes</h2>
+            <p class="section-intro">Open a finished attempt to review the answers.</p>
+        </div>
+    </div>
+
+    <ul class="item-list">
+        {% for quiz in recent_quizzes %}
+            <li class="item-card">
+                <a href="{% url 'quiz:result' quiz.id %}" class="item-card-link">
+                    <span class="item-card-title">{{ quiz.dictionary.name }}</span>
+                    <span class="item-card-meta">{{ quiz.created_at|date:"M j, Y H:i" }}</span>
+                </a>
+            </li>
+        {% empty %}
+            <li class="empty-state">No quiz attempts yet.</li>
+        {% endfor %}
+    </ul>
+</section>
 {% endblock %}

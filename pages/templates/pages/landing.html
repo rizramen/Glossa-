@@ -1,29 +1,43 @@
 {% extends "base.html" %}
+{% block title %}Welcome | Glossa{% endblock %}
 
 {% block page_content %}
-<div style="text-align: center; padding: 50px;">
-    <h1>Welcome to Glossa</h1>
-    <p style="font-size: 1.2em; color: #555;">Your personal vocab-trainer.</p>
-
-    <br>
+<section class="hero">
+    <div class="hero-badge">Vocabulary Learning Workspace</div>
+    <h1>Glossa: your personal language notebook</h1>
+    <p class="hero-subtitle">Create personal dictionaries, collect useful words, and turn them into a study routine.</p>
 
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}!</p>
-        <a href="{% url 'dictionary:list' %}" style="text-decoration: none;">
-            <button style="padding: 15px 30px; font-size: 18px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">
-                My dictionaries &rarr;
-            </button>
-        </a>
+        <div class="hero-actions">
+            <p class="hero-copy">Hello, {{ user.username }}. Your dictionaries are ready.</p>
+            <a href="{% url 'dictionary:list' %}" class="button-primary">
+                Open my dictionaries
+            </a>
+        </div>
     {% else %}
-        <a href="{% url 'login' %}" style="text-decoration: none;">
-            <button style="padding: 15px 30px; font-size: 18px; cursor: pointer; background-color: #008CBA; color: white; border: none; border-radius: 5px;">
-                Login here
-            </button>
-        </a>
-
-        <p style="margin-top: 20px;">
-            No account? <a href="{% url 'register' %}">Register here</a>
-        </p>
+        <div class="hero-actions">
+            <a href="{% url 'login' %}" class="button-primary">
+                Sign in
+            </a>
+            <a href="{% url 'register' %}" class="button-secondary">
+                Create account
+            </a>
+        </div>
     {% endif %}
-</div>
+
+    <div class="hero-grid">
+        <article class="feature-card">
+            <h2>Personal dictionaries</h2>
+            <p>Keep vocabulary grouped the way you actually study: by class, topic, or language.</p>
+        </article>
+        <article class="feature-card">
+            <h2>Simple word entries</h2>
+            <p>Store terms, meanings, and language labels in a lightweight workflow.</p>
+        </article>
+        <article class="feature-card">
+            <h2>Room to grow</h2>
+            <p>The project already includes foundations for quiz, friends, and word-of-day features.</p>
+        </article>
+    </div>
+</section>
 {% endblock %}

@@ -1,20 +1,37 @@
 {% extends "base.html" %}
+{% block title %}{{ dictionary.name }} | Glossa{% endblock %}
 
 {% block page_content %}
-  <h1>Dictionary: {{ dictionary.name }}</h1>
+<section class="panel">
+  <div class="section-header">
+      <div>
+          <p class="eyebrow">Dictionary</p>
+          <h1>{{ dictionary.name }}</h1>
+          <p class="section-intro">Language: {{ dictionary.get_language_display }}</p>
+      </div>
+      <div class="action-row">
+          <a href="{% url 'dictionary:add_word' dictionary.id %}" class="button-primary">
+              Add new word
+          </a>
+          <a href="{% url 'dictionary:delete' dictionary.id %}" class="button-secondary">
+              Delete dictionary
+          </a>
+      </div>
+  </div>
 
-  <p>
-      <a href="{% url 'dictionary:add_word' dictionary.id %}">
-          <button>+ Add new word</button>
-      </a>
-  </p>
-
-  <h3>Words:</h3>
-  <ul>
+  <h3>Words</h3>
+  <ul class="word-list">
     {% for word in dictionary.words.all %}
-      <li><strong>{{ word.term }}</strong>: {{ word.definition }} ({{ word.language }})</li>
+      <li class="word-card">
+          <div class="word-card-header">
+              <strong>{{ word.term }}</strong>
+              <span class="pill">{{ dictionary.get_language_display }}</span>
+          </div>
+          <p>{{ word.definition }}</p>
+      </li>
     {% empty %}
-      <li>No words added yet.</li>
+      <li class="empty-state">No words added yet.</li>
     {% endfor %}
   </ul>
+</section>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Delete {{ object.name }} | Glossa{% endblock %}
+
+{% block page_content %}
+<section class="form-card">
+    <h1>Delete Dictionary</h1>
+    <p class="section-intro">Are you sure you want to delete "{{ object.name }}"? This will also remove all words inside it.</p>
+    <form method="post" class="stack-form">
+        {% csrf_token %}
+        <button type="submit" class="button-primary">Delete permanently</button>
+    </form>
+    <p class="spaced-text">
+        <a href="{% url 'dictionary:detail' object.id %}">Cancel and go back</a>
+    </p>
+</section>
+{% endblock %}

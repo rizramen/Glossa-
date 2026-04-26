@@ -1,5 +1,27 @@
 {% extends "base.html" %}
+{% block title %}Quiz Question | Glossa{% endblock %}
 
 {% block page_content %}
-<h1>question</h1>
+<section class="panel">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">{{ dictionary.name }} • {{ dictionary.get_language_display }}</p>
+            <h1>Question {{ question_number }} of {{ total_questions }}</h1>
+            <p class="section-intro">Pick the correct definition for the word below.</p>
+        </div>
+    </div>
+
+    <div class="word-card">
+        <div class="word-card-header">
+            <strong>{{ word.term }}</strong>
+            <span class="pill">{{ dictionary.get_language_display }}</span>
+        </div>
+    </div>
+
+    <form method="post" class="stack-form spaced-text">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-primary">Submit answer</button>
+    </form>
+</section>
 {% endblock %}
