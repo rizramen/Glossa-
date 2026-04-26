@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import shutil
 from pathlib import Path
 
 import dj_database_url
@@ -30,6 +31,7 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+VERCEL = os.environ.get("VERCEL", "").lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = {
     host.strip()
@@ -123,12 +125,38 @@ WSGI_APPLICATION = 'Glossa.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-    )
-}
+database_url = (
+    os.environ.get("DATABASE_URL")
+    or os.environ.get("POSTGRES_URL_NON_POOLING")
+    or os.environ.get("POSTGRES_URL")
+)
+
+if database_url:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    sqlite_path = BASE_DIR / "db.sqlite3"
+
+    if VERCEL:
+        # Vercel's deployment filesystem is read-only. Copy the bundled
+        # SQLite database into /tmp so forms, sessions, and demo data can
+        # still work when no external Postgres database is configured yet.
+        sqlite_tmp_path = Path("/tmp/db.sqlite3")
+        if not sqlite_tmp_path.exists() and sqlite_path.exists():
+            shutil.copy2(sqlite_path, sqlite_tmp_path)
+        sqlite_path = sqlite_tmp_path
+
+    DATABASES = {
+        "default": dj_database_url.parse(
+            f"sqlite:///{sqlite_path}",
+            conn_max_age=600,
+        )
+    }
 
 
 # Password validation
