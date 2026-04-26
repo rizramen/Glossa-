@@ -41,6 +41,13 @@ render_external_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip(
 if render_external_hostname:
     ALLOWED_HOSTS.add(render_external_hostname)
 
+for vercel_host in (
+    os.environ.get("VERCEL_URL", "").strip(),
+    os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "").strip(),
+):
+    if vercel_host:
+        ALLOWED_HOSTS.add(vercel_host.removeprefix("https://").removeprefix("http://"))
+
 ALLOWED_HOSTS = sorted(ALLOWED_HOSTS)
 
 CSRF_TRUSTED_ORIGINS = {
@@ -52,6 +59,14 @@ CSRF_TRUSTED_ORIGINS = {
 render_external_url = os.environ.get("RENDER_EXTERNAL_URL", "").strip()
 if render_external_url:
     CSRF_TRUSTED_ORIGINS.add(render_external_url)
+
+for vercel_host in (
+    os.environ.get("VERCEL_URL", "").strip(),
+    os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "").strip(),
+):
+    if vercel_host:
+        vercel_host = vercel_host.removeprefix("https://").removeprefix("http://")
+        CSRF_TRUSTED_ORIGINS.add(f"https://{vercel_host}")
 
 CSRF_TRUSTED_ORIGINS = sorted(CSRF_TRUSTED_ORIGINS)
 
@@ -158,6 +173,7 @@ LOGIN_URL = "/users/login/"
 LOGOUT_REDIRECT_URL = 'landing'
 
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
