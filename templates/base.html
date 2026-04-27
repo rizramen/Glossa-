@@ -15,10 +15,8 @@
         <a href="/dictionary/">Dictionaries</a>
         <a href="/quiz/">Quiz</a>
         <a href="/friends/">Friends</a>
-    </div>
-    <div class="nav-user">
-    {% if user.is_authenticated %}
-        <span>Hello, <strong>{{ user.username }}</strong>!</span>
+        {% if user.is_authenticated %}
+        <span class="nav-account-start nav-greeting">Hello, <strong>{{ user.username }}</strong>!</span>
 
         <form action="{% url 'logout' %}" method="post" class="inline-form">
             {% csrf_token %}
@@ -26,10 +24,9 @@
                 Logout
             </button>
         </form>
-
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
+        {% else %}
+        <a class="nav-account-start" href="{% url 'login' %}">Login</a>
+        {% endif %}
     </div>
 </nav>
 
